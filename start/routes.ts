@@ -20,14 +20,7 @@ const RegTemperaturasController = () => import('#controllers/reg_temperaturas_co
 const VacinaEstoquesController = () => import('#controllers/vacina_estoques_controller')
 const HigieneSalasController = () => import('#controllers/higiene_salas_controller')
 
-
-
 router.group(() => {
-  router.get('/', async () => {
-    return {
-      hello: 'world',
-    }
-  })
 
   router.resource('/enderecos', EnderecosController).apiOnly()
   router.resource('/ubs', UbsController).apiOnly()

@@ -9,7 +9,7 @@ export default class EnderecosController {
         
         const endereco = await Endereco.create(body)
 
-        response.status(201) //Sucesso: Dado inserido 
+        response.status(201) 
 
         return {
             data: endereco,
