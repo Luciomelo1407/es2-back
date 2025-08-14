@@ -13,6 +13,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('salas')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
 
       table.string('tipo').notNullable()

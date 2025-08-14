@@ -1,7 +1,18 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import hash from '@adonisjs/core/services/hash'
+import { compose } from '@adonisjs/core/helpers'
+import { BaseModel, column, hasOne, scope } from '@adonisjs/lucid/orm'
+import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
+import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
+import Endereco from '#models/endereco'
+import { type HasOne } from '@adonisjs/lucid/types/relations'
 
-export default class Profissional extends BaseModel {
+const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
+  uids: ['email'],
+  passwordColumnName: 'password',
+})
+
+export default class Profissional extends compose(BaseModel, AuthFinder) {
   @column({ isPrimary: true })
   declare id: number
 
@@ -20,8 +31,11 @@ export default class Profissional extends BaseModel {
   @column()
   declare email: string
 
-  @column()
+  @column({ serializeAs: null })
   declare senha: string
+
+  @column()
+  declare token: string | null
 
   @column.date()
   declare dataNascimento: DateTime
@@ -29,15 +43,17 @@ export default class Profissional extends BaseModel {
   @column()
   declare cpf: string
 
-  @column()
-  declare enderecoId: number
+  @hasOne(() => Endereco)
+  declare enderecoId: HasOne<typeof Endereco>
 
   @column()
-  declare ubsId: number
+  declare ubsId: number  
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
+  declare updatedAt: DateTime | null
+
+  static accessTokens = DbAccessTokensProvider.forModel(Profissional)
 }

@@ -13,6 +13,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('estoques')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
 
       table.float('temperatura').notNullable()
@@ -24,6 +25,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('profissionais')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
 
       table.timestamp('created_at')

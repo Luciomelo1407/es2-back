@@ -13,6 +13,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('vacina_lotes')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
 
       table
@@ -21,6 +22,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('estoques')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
 
       table.integer('quantidade').notNullable()

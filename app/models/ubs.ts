@@ -1,7 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column , hasOne} from '@adonisjs/lucid/orm'
+import type { HasOne } from '@adonisjs/lucid/types/relations'
+import Endereco from './endereco.js'
 
-export default class Ub extends BaseModel {
+export default class Ubs extends BaseModel {
+
   @column({ isPrimary: true })
   declare id: number
 
@@ -17,8 +20,8 @@ export default class Ub extends BaseModel {
   @column()
   declare atendeSus: boolean
 
-  @column()
-  declare enderecoId: number
+  @hasOne(() => Endereco)
+  declare enderecoId: HasOne<typeof Endereco>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

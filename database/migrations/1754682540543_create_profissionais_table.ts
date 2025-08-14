@@ -20,6 +20,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('enderecos')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
 
       table
@@ -28,6 +29,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('ubs')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
 
       table.timestamp('created_at').notNullable()

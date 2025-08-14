@@ -14,10 +14,7 @@ export default class extends BaseSchema {
 
       table
         .integer('endereco_id')
-        .unsigned()
-        .notNullable()
-        .references('id')
-        .inTable('enderecos')
+        .references('enderecos.id')
         .onDelete('CASCADE')
 
       table.timestamp('created_at')

@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
+import Profissional from '#models/profissional'
+import Ubs from '#models/ubs'
 
 export default class Endereco extends BaseModel {
   @column({ isPrimary: true })
@@ -25,6 +27,12 @@ export default class Endereco extends BaseModel {
 
   @column()
   declare complemento: string
+
+  @belongsToPolymorphic(() => [Profissional, Ubs], {
+    foreignKey: 'enderecable_id',
+    polymorphicType: 'enderecable_type',
+  })
+  declare enderecable: BelongsToPolymorphic<typeof Profissional | typeof Ubs>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

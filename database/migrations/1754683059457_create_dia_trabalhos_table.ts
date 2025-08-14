@@ -13,6 +13,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('profissionais')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
 
       table
@@ -21,6 +22,7 @@ export default class extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('salas')
+        .onUpdate('CASCADE')
         .onDelete('CASCADE')
 
       table.timestamp('created_at')
