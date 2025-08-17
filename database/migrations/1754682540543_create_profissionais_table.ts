@@ -2,9 +2,10 @@ import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
   protected tableName = 'profissionais'
+  protected schemaName = 'base'
 
   async up() {
-    this.schema.createTable(this.tableName, (table) => {
+    this.schema.withSchema(this.schemaName).createTable(this.tableName, (table) => {
       table.increments('id').notNullable()
       table.string('nome_completo').nullable()
       table.string('coren').notNullable()
@@ -19,7 +20,7 @@ export default class extends BaseSchema {
         .unsigned()
         .notNullable()
         .references('id')
-        .inTable('enderecos')
+        .inTable('base.enderecos')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
 
@@ -28,7 +29,7 @@ export default class extends BaseSchema {
         .unsigned()
         .notNullable()
         .references('id')
-        .inTable('ubs')
+        .inTable('base.ubs')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
 
@@ -38,6 +39,6 @@ export default class extends BaseSchema {
   }
 
   async down() {
-    this.schema.dropTable(this.tableName)
+    this.schema.withSchema(this.schemaName).dropTable(this.tableName)
   }
 }
