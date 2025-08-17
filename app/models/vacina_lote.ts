@@ -2,10 +2,12 @@ import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 export default class VacinaLote extends BaseModel {
+  static table = 'base.vacina_lotes_estoques'
+
   @column({ isPrimary: true })
   declare id: number
 
-  @column()
+  @column({ columnName: 'cod_lote'})
   declare codLote: string
 
   @column.date()

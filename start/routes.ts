@@ -19,6 +19,7 @@ const DiaTrabalhosController = () => import('#controllers/dia_trabalhos_controll
 const RegTemperaturasController = () => import('#controllers/reg_temperaturas_controller')
 const VacinaEstoquesController = () => import('#controllers/vacina_estoques_controller')
 const HigieneSalasController = () => import('#controllers/higiene_salas_controller')
+const AuthController = () => import('#controllers/auth_controller')
 
 router.group(() => {
 
@@ -34,3 +35,10 @@ router.group(() => {
   router.resource('/higiene_salas', HigieneSalasController).apiOnly()
 
 }).prefix('/api')
+
+router.post('/login', [AuthController,'login'])
+
+router.group(() => {
+  router.get('/me', [AuthController,'me'])
+  router.post('/logout', [AuthController,'logout'])
+}).prefix('/auth')

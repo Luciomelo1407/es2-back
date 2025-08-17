@@ -1,9 +1,12 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasOne } from '@adonisjs/lucid/orm'
 import Profissional from '#models/profissional'
 import Ubs from '#models/ubs'
+import type { HasOne } from '@adonisjs/lucid/types/relations'
 
 export default class Endereco extends BaseModel {
+  static table = 'base.enderecos'
+
   @column({ isPrimary: true })
   declare id: number
 
@@ -23,16 +26,16 @@ export default class Endereco extends BaseModel {
   declare rua: string
 
   @column()
-  declare numero: string
+  declare numero: number | null
 
   @column()
-  declare complemento: string
+  declare complemento: string | null
 
-  @belongsToPolymorphic(() => [Profissional, Ubs], {
-    foreignKey: 'enderecable_id',
-    polymorphicType: 'enderecable_type',
-  })
-  declare enderecable: BelongsToPolymorphic<typeof Profissional | typeof Ubs>
+  @hasOne(() => Profissional)
+  declare profissional: HasOne<typeof Profissional>
+
+  @hasOne(() => Ubs)
+  declare ubs: HasOne<typeof Ubs>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
