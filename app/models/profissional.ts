@@ -17,11 +17,11 @@ const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
 
 export default class Profissional extends compose(BaseModel, AuthFinder) {
   static table = 'base.profissionais'
-  
+
   @column({ isPrimary: true })
   declare id: number
 
-  @column({ columnName: 'nome_completo' })
+  @column()
   declare nomeCompleto: string
 
   @column()
@@ -30,8 +30,8 @@ export default class Profissional extends compose(BaseModel, AuthFinder) {
   @column()
   declare cbo: string
 
-  @column({ columnName: 'id_admin' })
-  declare idAdmin: boolean
+  @column()
+  declare isAdmin: boolean
 
   @column()
   declare email: string
@@ -45,15 +45,15 @@ export default class Profissional extends compose(BaseModel, AuthFinder) {
   @column()
   declare cpf: string
 
-  @column({ columnName: 'endereco_id'})
-  declare enderecoId: number
+  @column({ columnName: 'endereco_id' })
+  declare enderecoId: number | undefined
 
   @belongsTo(() => Endereco, {
     foreignKey: 'endereco_id',
   })
   declare endereco: BelongsTo<typeof Endereco>
 
-  @column({ columnName: 'ubs_id'})
+  @column({ columnName: 'ubs_id' })
   declare ubsId: number
 
   @belongsTo(() => Ubs, {
