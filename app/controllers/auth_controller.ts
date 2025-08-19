@@ -2,57 +2,59 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Profissional from '#models/profissional'
 
 export default class AuthController {
-
   async login({ request, response }: HttpContext) {
     try {
-        const { email, password } = request.only(['email', 'password'])
+      const { email, password } = request.only(['email', 'password'])
 
-        const profissional = await Profissional.verifyCredentials(email, password)
+      const profissional = await Profissional.verifyCredentials(email, password)
 
-        if (!profissional) {
-            // Retorna uma falha se o profissional não for encontrado
-            return response.sendFail("Profissional não cadastrado.", request)
-        }
+      const access_token = await Profissional.accessTokens.create(profissional)
 
-        const accessToken = await Profissional.accessTokens.create(profissional)
+      if (!profissional) {
+        // Retorna uma falha se o profissional não for encontrado
+        return response.sendFail('Profissional não cadastrado.', request)
+      }
 
-        // Retorna sucesso com o token e os dados do profissional
-        return response.sendSuccess({ accessToken, profissional }, request)
+      // Retorna sucesso com o token e os dados do profissional
+      return response.sendSuccess({ profissional, access_token }, request)
     } catch (error) {
-        throw error
+      throw error
     }
   }
 
-    async logout({ auth, response }: HttpContext) {
-        try {
-            await auth.check()
+  async signIn({ request, response }: HttpContext) {
+    return
+  }
 
-            if (auth.user) {
-            await auth.use('api').invalidateToken()
+  async logout({ auth, response }: HttpContext) {
+    try {
+      await auth.check()
 
-            return response.ok({
-                message: 'Successfully logged out.'
-            })
-            }
+      if (auth.user) {
+        await auth.use('api').invalidateToken()
 
-            return response.unauthorized({ message: 'User is not logged in' })
-        } catch (error) {
-            return response.internalServerError({ message: 'Failed to log out' })
-        }
+        return response.ok({
+          message: 'Successfully logged out.',
+        })
+      }
+
+      return response.unauthorized({ message: 'User is not logged in' })
+    } catch (error) {
+      return response.internalServerError({ message: 'Failed to log out' })
     }
+  }
 
-    async me({ auth, response }: HttpContext) {
-        try {
-            await auth.check()
+  async me({ auth, response, request }: HttpContext) {
+    try {
+      await auth.check()
 
-            if (auth.user) {
-                return response.ok(auth.user)
-            }
+      if (auth.user) {
+        return response.sendSuccess(auth.user, request, 200)
+      }
 
-            return response.unauthorized({ message: 'Usuário não autenticado' })
-
-        } catch (error) {
-            return response.unauthorized({ message: 'Falha de altenticação' })
-        }
+      return response.unauthorized({ message: 'Usuário não autenticado' })
+    } catch (error) {
+      return response.unauthorized({ message: 'Falha de altenticação' })
     }
+  }
 }

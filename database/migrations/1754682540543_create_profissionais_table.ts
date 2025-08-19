@@ -14,11 +14,12 @@ export default class extends BaseSchema {
       table.string('senha').notNullable()
       table.date('data_nascimento').notNullable()
       table.string('cpf', 11).notNullable().unique()
+      table.boolean('is_admin').defaultTo(false)
 
       table
         .integer('endereco_id')
         .unsigned()
-        .notNullable()
+        .nullable()
         .references('id')
         .inTable('base.enderecos')
         .onUpdate('CASCADE')

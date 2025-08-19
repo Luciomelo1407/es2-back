@@ -8,6 +8,7 @@
 */
 
 import router from '@adonisjs/core/services/router'
+import { middleware } from './kernel.js'
 
 const EnderecosController = () => import('#controllers/enderecos_controller')
 const UbsController = () => import('#controllers/ubs_controller')
@@ -21,24 +22,27 @@ const VacinaEstoquesController = () => import('#controllers/vacina_estoques_cont
 const HigieneSalasController = () => import('#controllers/higiene_salas_controller')
 const AuthController = () => import('#controllers/auth_controller')
 
-router.group(() => {
+router
+  .group(() => {
+    router.resource('/enderecos', EnderecosController).apiOnly()
+    router.resource('/ubs', UbsController).apiOnly()
+    router.resource('/profissionais', ProfissionaisController).apiOnly()
+    router.resource('/vacina_lotes', VacinaLotesController).apiOnly()
+    router.resource('/salas', SalasController).apiOnly()
+    router.resource('/estoques', EstoquesController).apiOnly()
+    router.resource('/dia_trabalhos', DiaTrabalhosController).apiOnly()
+    router.resource('/reg_temperaturas', RegTemperaturasController).apiOnly()
+    router.resource('/vacina_estoques', VacinaEstoquesController).apiOnly()
+    router.resource('/higiene_salas', HigieneSalasController).apiOnly()
+  })
+  .prefix('/api')
 
-  router.resource('/enderecos', EnderecosController).apiOnly()
-  router.resource('/ubs', UbsController).apiOnly()
-  router.resource('/profissionais', ProfissionaisController).apiOnly()
-  router.resource('/vacina_lotes', VacinaLotesController).apiOnly()
-  router.resource('/salas', SalasController).apiOnly()
-  router.resource('/estoques', EstoquesController).apiOnly()
-  router.resource('/dia_trabalhos', DiaTrabalhosController).apiOnly()
-  router.resource('/reg_temperaturas', RegTemperaturasController).apiOnly()
-  router.resource('/vacina_estoques', VacinaEstoquesController).apiOnly()
-  router.resource('/higiene_salas', HigieneSalasController).apiOnly()
+router.post('/login', [AuthController, 'login'])
 
-}).prefix('/api')
-
-router.post('/login', [AuthController,'login'])
-
-router.group(() => {
-  router.get('/me', [AuthController,'me'])
-  router.post('/logout', [AuthController,'logout'])
-}).prefix('/auth')
+router
+  .group(() => {
+    router.get('/me', [AuthController, 'me'])
+    router.post('/logout', [AuthController, 'logout'])
+  })
+  .use([middleware.auth()])
+  .prefix('/auth')

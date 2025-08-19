@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column , belongsTo, hasMany} from '@adonisjs/lucid/orm'
+import { BaseModel, column, belongsTo, hasMany } from '@adonisjs/lucid/orm'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import Endereco from './endereco.js'
 import Sala from './sala.js'
@@ -20,11 +20,11 @@ export default class Ubs extends BaseModel {
   @column()
   declare gestao: string
 
-  @column({ columnName: 'atende_sus' })
+  @column()
   declare atendeSus: boolean
 
-  @column({ columnName: 'endereco_id'})
-  declare enderecoId: number
+  @column()
+  declare enderecoId: number | undefined
 
   @belongsTo(() => Endereco, {
     foreignKey: 'endereco_id',
