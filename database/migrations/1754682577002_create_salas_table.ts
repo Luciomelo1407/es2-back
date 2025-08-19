@@ -16,7 +16,7 @@ export default class extends BaseSchema {
       table.boolean('porta_lavavel').notNullable().defaultTo(false)
       table.boolean('janela_lavavel').notNullable().defaultTo(false)
       table.boolean('teto_lavavel').notNullable().defaultTo(false)
-      table.boolean('pja').notNullable().defaultTo(false)
+      table.boolean('pia').notNullable().defaultTo(false)
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
