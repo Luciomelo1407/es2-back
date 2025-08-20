@@ -10,7 +10,7 @@ export default class extends BaseSchema {
 
       table.string('cod_lote').notNullable()
       table.date('validade').notNullable()
-      table.string('identificador').notNullable()
+      table.string('identificador').nullable()
       table.string('sigla').notNullable()
       table.string('nome').notNullable()
       table.string('tipo').notNullable()

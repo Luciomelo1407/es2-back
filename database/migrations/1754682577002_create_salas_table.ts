@@ -8,8 +8,7 @@ export default class extends BaseSchema {
     this.schema.withSchema(this.schemaName).createTable(this.tableName, (table) => {
       table.increments('id')
 
-      table.integer('numero').notNullable()
-      table.float('tamanho').notNullable()
+      table.float('tamanho').nullable()
       table.boolean('acessibilidade').notNullable().defaultTo(false)
       table.boolean('parede_lavavel').notNullable().defaultTo(false)
       table.boolean('piso_lavavel').notNullable().defaultTo(false)

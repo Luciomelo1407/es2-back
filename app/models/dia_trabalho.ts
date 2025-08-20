@@ -10,7 +10,7 @@ export default class DiaTrabalho extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
-  @column({ columnName: 'profissional_id'})
+  @column({ columnName: 'profissional_id' })
   declare profissionalId: number
 
   @belongsTo(() => Profissional, {
@@ -18,7 +18,7 @@ export default class DiaTrabalho extends BaseModel {
   })
   declare profissional: BelongsTo<typeof Profissional>
 
-  @column({ columnName: 'sala_id'})
+  @column({ columnName: 'sala_id' })
   declare salaId: number
 
   @belongsTo(() => Sala, {

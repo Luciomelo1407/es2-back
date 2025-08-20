@@ -13,10 +13,7 @@ export default class Sala extends BaseModel {
   declare id: number
 
   @column()
-  declare numero: number
-
-  @column()
-  declare tamanho: number  // float
+  declare tamanho: number | null // float
 
   @column()
   declare acessibilidade: boolean
@@ -39,7 +36,7 @@ export default class Sala extends BaseModel {
   @column()
   declare pja: boolean
 
-  @column({ columnName: 'ubs_id'})
+  @column({ columnName: 'ubs_id' })
   declare ubsId: number
 
   @belongsTo(() => Ubs, {
@@ -52,7 +49,7 @@ export default class Sala extends BaseModel {
 
   @hasMany(() => DiaTrabalho)
   declare diasTrabalho: HasMany<typeof DiaTrabalho>
-  
+
   @hasMany(() => HigieneSala)
   declare higienesSala: HasMany<typeof HigieneSala>
 

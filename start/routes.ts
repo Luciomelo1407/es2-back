@@ -37,6 +37,8 @@ router
   })
   .prefix('/api')
 
+router.get('/hoje')
+
 router.post('/login', [AuthController, 'login'])
 
 router

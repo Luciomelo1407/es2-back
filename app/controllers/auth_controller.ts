@@ -4,6 +4,7 @@ import Profissional from '#models/profissional'
 export default class AuthController {
   async login({ request, response }: HttpContext) {
     try {
+      console.log('USUARIO AUTENTICADO')
       const { email, password } = request.only(['email', 'password'])
 
       const profissional = await Profissional.verifyCredentials(email, password)

@@ -18,7 +18,6 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
 
       table.float('temperatura').notNullable()
-      table.dateTime('data_hora').notNullable()
 
       table
         .integer('responsavel')
