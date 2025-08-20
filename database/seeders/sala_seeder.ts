@@ -11,6 +11,7 @@ export default class extends BaseSeeder {
     const trx = await db.transaction()
     try {
       const sala = await Sala.create({ id: 0 }, { client: trx })
+
       const estoque = await Estoque.create(
         {
           tipo: 'caixa termica',
@@ -18,6 +19,7 @@ export default class extends BaseSeeder {
         },
         { client: trx }
       )
+
       const vacinaLote = await VacinaLote.create(
         {
           codLote: 'seagasegas',
@@ -37,7 +39,9 @@ export default class extends BaseSeeder {
 
       await trx.commit()
     } catch (error) {
+      console.log('deu merda')
       await trx.rollback()
+      throw error
     }
   }
 }

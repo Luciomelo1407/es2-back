@@ -9,6 +9,7 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+import DiaTrabalho from '#models/dia_trabalho'
 
 const EnderecosController = () => import('#controllers/enderecos_controller')
 const UbsController = () => import('#controllers/ubs_controller')
@@ -30,14 +31,15 @@ router
     router.resource('/vacina_lotes', VacinaLotesController).apiOnly()
     router.resource('/salas', SalasController).apiOnly()
     router.resource('/estoques', EstoquesController).apiOnly()
-    router.resource('/dia_trabalhos', DiaTrabalhosController).apiOnly()
     router.resource('/reg_temperaturas', RegTemperaturasController).apiOnly()
     router.resource('/vacina_estoques', VacinaEstoquesController).apiOnly()
     router.resource('/higiene_salas', HigieneSalasController).apiOnly()
   })
   .prefix('/api')
 
-router.get('/hoje')
+router.post('/reg-temperaturas', [RegTemperaturasController, 'store'])
+
+router.post('/dia-trabalho', [DiaTrabalhosController, 'store'])
 
 router.post('/login', [AuthController, 'login'])
 

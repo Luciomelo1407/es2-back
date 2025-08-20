@@ -1,17 +1,28 @@
 import type { HttpContext } from '@adonisjs/core/http'
 
 import DiaTrabalho from '#models/dia_trabalho'
+import Sala from '#models/sala'
 
 export default class DiaTrabalhosController {
   public async store({ request, response }: HttpContext) {
-    const body = request.body()
+    try {
+      const { profissionalId, salaId }: { profissionalId: number; salaId: number } = request.only([
+        'profissionalId',
+        'salaId',
+      ])
 
-    const dia_trabalho = await DiaTrabalho.create(body)
+      const dia_trabalho = await DiaTrabalho.create({
+        profissionalId: profissionalId,
+        salaId: salaId,
+      })
 
-    response.status(201)
+      const sala = await Sala.findOrFail(salaId)
+      await sala.load('estoques')
+      const estoques = sala.estoques
 
-    return {
-      data: dia_trabalho,
+      return response.sendSuccess({ dia_trabalho, sala, estoques }, request, 201)
+    } catch (error) {
+      throw error
     }
   }
 
