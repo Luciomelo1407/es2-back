@@ -27,19 +27,21 @@ router
   .group(() => {
     router.resource('/enderecos', EnderecosController).apiOnly()
     router.resource('/ubs', UbsController).apiOnly()
-    router.resource('/profissionais', ProfissionaisController).apiOnly()
     router.resource('/vacina_lotes', VacinaLotesController).apiOnly()
     router.resource('/salas', SalasController).apiOnly()
     router.resource('/estoques', EstoquesController).apiOnly()
     router.resource('/reg_temperaturas', RegTemperaturasController).apiOnly()
-    router.resource('/vacina_estoques', VacinaEstoquesController).apiOnly()
     router.resource('/higiene_salas', HigieneSalasController).apiOnly()
   })
   .prefix('/api')
 
-router.post('/reg-temperaturas', [RegTemperaturasController, 'store'])
+router.post('/vacina', [VacinaEstoquesController, 'store']).use([middleware.auth()])
 
-router.post('/dia-trabalho', [DiaTrabalhosController, 'store'])
+router.post('/reg-temperatura', [RegTemperaturasController, 'store']).use([middleware.auth()])
+
+router.get('/dia-trabalho/:id', [DiaTrabalhosController, 'getById']).use([middleware.auth()])
+
+router.post('/dia-trabalho', [DiaTrabalhosController, 'store']).use([middleware.auth()])
 
 router.post('/login', [AuthController, 'login'])
 

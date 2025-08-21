@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 import Profissional from '#models/profissional'
 import { DateTime } from 'luxon'
+import DiaTrabalho from '#models/dia_trabalho'
 
 export default class ProfissionaisController {
   public async store({ request, response }: HttpContext) {

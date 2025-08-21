@@ -20,7 +20,7 @@ export default class extends BaseSchema {
       table.float('temperatura').notNullable()
 
       table
-        .integer('responsavel')
+        .integer('profissional_id')
         .unsigned()
         .notNullable()
         .references('id')

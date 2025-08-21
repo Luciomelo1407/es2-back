@@ -13,15 +13,13 @@ export default class RegTemperatura extends BaseModel {
   @column()
   declare temperatura: number
 
-  @column({ columnName: 'profissional_id'})
+  @column()
   declare profissionalId: number
 
-  @belongsTo(() => Profissional, {
-    foreignKey: 'profissional_id',
-  })
+  @belongsTo(() => Profissional)
   declare profissional: BelongsTo<typeof Profissional>
 
-  @column({ columnName: 'estoque_id'})
+  @column({ columnName: 'estoque_id' })
   declare estoqueId: number
 
   @belongsTo(() => Estoque, {

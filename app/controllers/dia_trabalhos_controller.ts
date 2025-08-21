@@ -26,6 +26,24 @@ export default class DiaTrabalhosController {
     }
   }
 
+  public async getById({ request, response, params }: HttpContext) {
+    try {
+      const id = await params.id
+      console.log('paramsId = ', params.id)
+      const diaTrabalho = await DiaTrabalho.query()
+        .where('profissional_id', id)
+        .orderBy('updated_at', 'desc')
+        .preload('sala')
+        .firstOrFail()
+      const sala = diaTrabalho.sala
+      await sala.load('estoques')
+
+      return response.sendSuccess({ diaTrabalho }, request, 200)
+    } catch (error) {
+      throw error
+    }
+  }
+
   public async index() {
     const dia_trabalhos = await DiaTrabalho.all()
 

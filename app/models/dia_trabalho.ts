@@ -18,12 +18,10 @@ export default class DiaTrabalho extends BaseModel {
   })
   declare profissional: BelongsTo<typeof Profissional>
 
-  @column({ columnName: 'sala_id' })
+  @column()
   declare salaId: number
 
-  @belongsTo(() => Sala, {
-    foreignKey: 'sala_id',
-  })
+  @belongsTo(() => Sala)
   declare sala: BelongsTo<typeof Sala>
 
   @column.dateTime({ autoCreate: true })

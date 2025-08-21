@@ -28,6 +28,7 @@ export default class extends BaseSeeder {
           nome: 'sefeiasuhefas',
           tipo: 'asefasefas',
           fabricante: 'sefhasefiuase',
+          doses: 1,
         },
         { client: trx }
       )
@@ -39,7 +40,6 @@ export default class extends BaseSeeder {
 
       await trx.commit()
     } catch (error) {
-      console.log('deu merda')
       await trx.rollback()
       throw error
     }
