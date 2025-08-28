@@ -2,19 +2,22 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 import Estoque from '#models/estoque'
 import RegTemperatura from '#models/reg_temperatura'
+import { TemperaturaService } from '#services/temperatura_service'
 
 export default class EstoquesController {
   public async getBySalaId({ request, response, params }: HttpContext) {
     try {
       const salaId = await params.id
       const estoques = await Estoque.query().preload('vacinaEstoque').where('sala_id', salaId)
+      const estoqueId: number[] = []
       for (const estoque of estoques) {
-        console.log(estoque)
+        estoqueId.push(estoque.id)
         for (const vacinaEstoque of estoque.vacinaEstoque) {
           await vacinaEstoque.load('vacinaLotes')
         }
       }
-      return response.sendSuccess(estoques, request, 200)
+      const temperatura = await TemperaturaService.getTemperatura(estoqueId)
+      return response.sendSuccess({ estoques, temperatura }, request, 200)
     } catch (error) {
       throw error
     }
