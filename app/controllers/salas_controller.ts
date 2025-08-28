@@ -1,58 +1,22 @@
+import DiaTrabalho from '#models/dia_trabalho'
+import Sala from '#models/sala'
 import type { HttpContext } from '@adonisjs/core/http'
 
-import Sala from '#models/sala'
-
 export default class SalasController {
+  async getByProfissionalId({ request, response, params }: HttpContext) {
+    try {
+      const profissionalId = await params.id
 
-    public async store({request, response}: HttpContext) {
-        const body = request.body()
-        
-        const sala = await Sala.create(body)
+      const diaTrabalho = await DiaTrabalho.query()
+        .where('profissional_id', profissionalId)
+        .orderBy('updated_at', 'desc')
+        .firstOrFail()
 
-        response.status(201) 
+      const sala = await Sala.findOrFail(diaTrabalho.salaId)
 
-        return {
-            data: sala,
-        }
+      return response.sendSuccess(sala, request, 200)
+    } catch (error) {
+      throw error
     }
-
-    public async index() {
-        const salas = await Sala.all()
-        
-        return {
-            data: salas,
-        }
-    }
-
-    public async show({params}: HttpContext) {
-        const sala = await Sala.findOrFail(params.id)
-
-        return {
-            data: sala,
-        }
-    }
-
-    public async destroy({params}: HttpContext) {
-        const sala = await Sala.findOrFail(params.id)
-
-        await sala.delete()
-        return {
-            message: "Sala excluído",
-            data: sala,
-        }
-    }
-
-    public async update({params, request}: HttpContext) {
-        const body = request.body()
-
-        const sala = await Sala.findOrFail(params.id)
-        sala.merge(body)
-
-        await sala.save()
-        return {
-            message: "Sala atualizado",
-            data: sala,
-        }
-
-    }
+  }
 }

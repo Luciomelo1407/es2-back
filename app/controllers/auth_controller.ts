@@ -12,7 +12,6 @@ export default class AuthController {
       const access_token = await Profissional.accessTokens.create(profissional)
 
       if (!profissional) {
-        // Retorna uma falha se o profissional não for encontrado
         return response.sendFail('Profissional não cadastrado.', request)
       }
 

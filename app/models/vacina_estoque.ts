@@ -10,21 +10,8 @@ export default class VacinaEstoque extends BaseModel {
   @column({ isPrimary: true, columnName: 'vacina_id' })
   declare vacinaId: number
 
-  @belongsTo(() => VacinaLote, {
-    foreignKey: 'vacina_id', 
-  })
-  declare vacina: BelongsTo<typeof VacinaLote>
-
   @column({ isPrimary: true, columnName: 'estoque_id' })
   declare estoqueId: number
-
-  @belongsTo(() => Estoque, {
-    foreignKey: 'estoque_id', 
-  })
-  declare estoque: BelongsTo<typeof Estoque>
-
-  @hasMany(() => VacinaLote)
-  declare vacinaLotes: HasMany<typeof VacinaLote>
 
   @column()
   declare quantidade: number
@@ -34,4 +21,12 @@ export default class VacinaEstoque extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @belongsTo(() => Estoque, {
+    foreignKey: 'estoque_id',
+  })
+  declare estoque: BelongsTo<typeof Estoque>
+
+  @belongsTo(() => VacinaLote, { foreignKey: 'vacinaId' })
+  declare vacinaLotes: BelongsTo<typeof VacinaLote>
 }

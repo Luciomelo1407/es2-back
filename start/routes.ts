@@ -9,11 +9,9 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-import DiaTrabalho from '#models/dia_trabalho'
 
 const EnderecosController = () => import('#controllers/enderecos_controller')
 const UbsController = () => import('#controllers/ubs_controller')
-const ProfissionaisController = () => import('#controllers/profissionais_controller')
 const VacinaLotesController = () => import('#controllers/vacina_lotes_controller')
 const SalasController = () => import('#controllers/salas_controller')
 const EstoquesController = () => import('#controllers/estoques_controller')
@@ -34,6 +32,10 @@ router
     router.resource('/higiene_salas', HigieneSalasController).apiOnly()
   })
   .prefix('/api')
+
+router.get('/estoque/:id', [EstoquesController, 'getBySalaId']).use([middleware.auth()])
+
+router.get('/sala/:id', [SalasController, 'getByProfissionalId']).use([middleware.auth()])
 
 router.post('/vacina', [VacinaEstoquesController, 'store']).use([middleware.auth()])
 
