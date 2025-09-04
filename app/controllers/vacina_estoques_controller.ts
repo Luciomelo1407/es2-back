@@ -70,6 +70,72 @@ export default class VacinaEstoquesController {
     }
   }
 
+  public async getByIds({ request, response, params }: HttpContext) {
+    try {
+      const vacinaId = params.vacinaId
+      const estoqueId = params.estoqueId
+
+      const vacinaEstoque = await VacinaEstoque.query()
+        .where('vacina_id', vacinaId)
+        .where('estoque_id', estoqueId)
+        .firstOrFail()
+
+      console.log(vacinaEstoque)
+
+      return response.sendSuccess(vacinaEstoque, request, 200)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  public async transferir({ request, response, params }: HttpContext) {
+    const trx = await db.transaction()
+    try {
+      let resultado = null
+      const vacinaEstoqueId = params.id
+      const { quantidade, estoqueDestinoId } = request.only(['quantidade', 'estoqueDestinoId'])
+      console.log('DEBUGG', vacinaEstoqueId)
+      const vacinaEstoqueAtual = await VacinaEstoque.findOrFail(vacinaEstoqueId)
+      await vacinaEstoqueAtual.load('vacinaLote')
+      vacinaEstoqueAtual.useTransaction(trx)
+      if (vacinaEstoqueAtual.quantidade === quantidade) {
+        await vacinaEstoqueAtual.delete()
+      } else {
+        vacinaEstoqueAtual.quantidade = vacinaEstoqueAtual.quantidade - quantidade
+        await vacinaEstoqueAtual.save()
+      }
+
+      const vacinaEstoqueDestino = await VacinaEstoque.query()
+        .where('vacina_id', vacinaEstoqueAtual.vacinaId)
+        .where('estoque_id', estoqueDestinoId)
+        .first()
+
+      if (vacinaEstoqueDestino) {
+        vacinaEstoqueDestino?.useTransaction(trx)
+        vacinaEstoqueDestino.quantidade = vacinaEstoqueDestino.quantidade + quantidade
+        await vacinaEstoqueDestino.save()
+        resultado = vacinaEstoqueDestino
+      } else {
+        const newVacinaEstoqueDestino = await VacinaEstoque.create(
+          {
+            vacinaId: vacinaEstoqueAtual.vacinaId,
+            estoqueId: estoqueDestinoId,
+            quantidade: quantidade,
+          },
+          { client: trx }
+        )
+        resultado = newVacinaEstoqueDestino
+      }
+
+      await trx.commit()
+
+      return response.sendSuccess(resultado, request, 200)
+    } catch (error) {
+      await trx.rollback()
+      throw error
+    }
+  }
+
   public async index() {
     const vacina_estoques = await VacinaEstoque.all()
 

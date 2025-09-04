@@ -1,0 +1,22 @@
+meta {
+  name: transferirVacina
+  type: http
+  seq: 8
+}
+
+put {
+  url: http://localhost:3333/vacina-estoque/5
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "quantidade":36,
+    "estoqueDestinoId":1
+  }
+}
+
+settings {
+  encodeUrl: true
+}

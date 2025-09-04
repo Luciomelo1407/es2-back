@@ -13,7 +13,7 @@ export default class EstoquesController {
       for (const estoque of estoques) {
         estoqueId.push(estoque.id)
         for (const vacinaEstoque of estoque.vacinaEstoque) {
-          await vacinaEstoque.load('vacinaLotes')
+          await vacinaEstoque.load('vacinaLote')
         }
       }
       const temperatura = await TemperaturaService.getTemperatura(estoqueId)
