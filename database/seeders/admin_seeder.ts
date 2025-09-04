@@ -12,7 +12,7 @@ export default class extends BaseSeeder {
         {
           cnes: 'xxxx',
           nome: 'xxxxxx',
-          gestao: 'gestao',
+          gestao: 'Gestao',
           atendeSus: true,
         },
         { client: trx }
