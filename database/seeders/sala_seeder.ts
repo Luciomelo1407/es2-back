@@ -14,7 +14,7 @@ export default class extends BaseSeeder {
 
       const estoque = await Estoque.create(
         {
-          tipo: 'caixa termica',
+          tipo: 'Caixa Termica',
           salaId: sala.id,
         },
         { client: trx }
@@ -22,13 +22,13 @@ export default class extends BaseSeeder {
 
       const vacinaLote = await VacinaLote.create(
         {
-          codLote: 'seagasegas',
+          codLote: 'ABC123456',
           validade: DateTime.fromSQL('2025-08-19 17:10:30.329 -0300'),
-          sigla: 'sefasefas',
-          nome: 'sefeiasuhefas',
-          tipo: 'asefasefas',
-          fabricante: 'sefhasefiuase',
-          doses: 1,
+          sigla: 'PFZ',
+          nome: 'Pfizer-BioNTech',
+          tipo: 'mRNA',
+          fabricante: 'Pfizer',
+          doses: 2,
         },
         { client: trx }
       )
