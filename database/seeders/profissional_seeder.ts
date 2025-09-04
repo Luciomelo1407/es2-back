@@ -8,15 +8,15 @@ export default class extends BaseSeeder {
     // Write your database queries inside the run method
     const ubs = await Ubs.first()
     const user = await Profissional.create({
-      email: 'czb@example.com',
+      email: 'user@vacenf.com',
       senha: '123',
-      nomeCompleto: 'carlos',
+      nomeCompleto: 'User',
       dataNascimento: DateTime.now(),
       isAdmin: false,
-      cbo: 'xxxxssef',
+      cbo: 'xxxxxxxx',
       coren: 'asefaefa',
       ubsId: ubs?.id,
-      cpf: 'sdfasefase',
+      cpf: '10020030040',
     })
     await Profissional.accessTokens.create(user)
   }
