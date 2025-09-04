@@ -1,16 +1,19 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
 import Estoque from './estoque.js'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import VacinaLote from './vacina_lote.js'
 
 export default class VacinaEstoque extends BaseModel {
   static table = 'base.vacina_estoques'
 
-  @column({ isPrimary: true, columnName: 'vacina_id' })
+  @column({ isPrimary: true })
+  declare id: number
+
+  @column({ columnName: 'vacina_id' })
   declare vacinaId: number
 
-  @column({ isPrimary: true, columnName: 'estoque_id' })
+  @column({ columnName: 'estoque_id' })
   declare estoqueId: number
 
   @column()
@@ -28,5 +31,5 @@ export default class VacinaEstoque extends BaseModel {
   declare estoque: BelongsTo<typeof Estoque>
 
   @belongsTo(() => VacinaLote, { foreignKey: 'vacinaId' })
-  declare vacinaLotes: BelongsTo<typeof VacinaLote>
+  declare vacinaLote: BelongsTo<typeof VacinaLote>
 }

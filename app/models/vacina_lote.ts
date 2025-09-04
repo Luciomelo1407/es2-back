@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import VacinaEstoque from './vacina_estoque.js'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
 
 export default class VacinaLote extends BaseModel {
   static table = 'base.vacina_lotes'
@@ -33,6 +35,9 @@ export default class VacinaLote extends BaseModel {
 
   @column()
   declare aberta: boolean
+
+  @hasMany(() => VacinaEstoque, { foreignKey: 'vacinaId' })
+  declare vacinaEstoques: HasMany<typeof VacinaEstoque>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
