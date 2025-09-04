@@ -20,15 +20,15 @@ export default class extends BaseSeeder {
 
       const admin = await Profissional.create(
         {
-          email: 'admin@example.com',
-          senha: 'admin',
+          email: 'admin@vacenf.com',
+          senha: '123',
           nomeCompleto: 'admin',
           dataNascimento: DateTime.now(),
           isAdmin: true,
           cbo: 'xxxx',
           coren: 'xxxxxx',
           ubsId: ubs.id,
-          cpf: 'lalalalal',
+          cpf: '00100200300',
         },
         { client: trx }
       )
