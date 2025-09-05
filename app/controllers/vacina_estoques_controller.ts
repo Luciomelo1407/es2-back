@@ -152,13 +152,38 @@ export default class VacinaEstoquesController {
     }
   }
 
-  public async destroy({ params }: HttpContext) {
-    const vacina_estoque = await VacinaEstoque.findOrFail(params.id)
+  public async destroy({ params, request, response }: HttpContext) {
+    const trx = await db.transaction()
+    try {
+      const id = params.id
+      const { quantidade } = request.only(['quantidade'])
+      const vacinaEstoque = await VacinaEstoque.findOrFail(id)
+      vacinaEstoque.useTransaction(trx)
 
-    await vacina_estoque.delete()
-    return {
-      message: 'VacinaEstoque excluída',
-      data: vacina_estoque,
+      if (vacinaEstoque.quantidade === quantidade) {
+        await vacinaEstoque.load('vacinaLote')
+        const vacinaLote = vacinaEstoque.vacinaLote
+        await vacinaLote.load('vacinaEstoques')
+        const vacinaLoteEstoques = vacinaLote.vacinaEstoques
+        const vacinaEstoqueRestante = vacinaLoteEstoques.filter((element) => {
+          element.id != vacinaEstoque.id
+        })
+
+        await vacinaEstoque.delete()
+        if (vacinaEstoqueRestante.length < 1) {
+          vacinaLote.useTransaction(trx)
+          await vacinaLote.delete()
+        }
+      } else {
+        vacinaEstoque.quantidade = vacinaEstoque.quantidade - quantidade
+        await vacinaEstoque.save()
+      }
+
+      await trx.commit()
+      return response.sendSuccess(null, request, 200)
+    } catch (error) {
+      await trx.rollback()
+      throw error
     }
   }
 
