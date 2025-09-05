@@ -34,6 +34,8 @@ router
   })
   .prefix('/api')
 
+router.delete('vacina-estoque/:id', [VacinaEstoquesController, 'destroy'])
+
 router.put('vacina-estoque/:id', [VacinaEstoquesController, 'transferir'])
 
 router.get('vacina-estoque/:vacinaId/:estoqueId', [VacinaEstoquesController, 'getByIds'])
