@@ -5,8 +5,14 @@ import { DateTime } from 'luxon'
 import DiaTrabalho from '#models/dia_trabalho'
 
 export default class ProfissionaisController {
+  /**
+   * Cadastra um novo profissional de saúde no sistema
+   * Cria o registro completo e gera automaticamente um token de acesso para autenticação
+   */
   public async store({ request, response }: HttpContext) {
     try {
+      // Extrai e tipifica os dados específicos necessários para criar um profissional
+      // Utiliza destructuring com tipos explícitos para garantir validação de entrada
       const {
         nomeCompleto,
         coren,
@@ -39,6 +45,8 @@ export default class ProfissionaisController {
         'enderecoId',
       ])
 
+      // Cria o registro do profissional com todos os dados obrigatórios
+      // O modelo provavelmente aplicará hash na senha e outras validações
       const profissional = await Profissional.create({
         nomeCompleto: nomeCompleto,
         coren: coren,
@@ -51,15 +59,25 @@ export default class ProfissionaisController {
         isAdmin: isAdmin,
       })
 
+      // Gera automaticamente um token de acesso para o profissional recém-criado
+      // Facilita o fluxo de cadastro + login imediato
       const accessToken = await Profissional.accessTokens.create(profissional)
 
+      // Retorna tanto os dados do profissional quanto o token para uso imediato
       return response.sendSuccess({ profissional, accessToken }, request, 201)
     } catch (error) {
+      // Propaga erro para tratamento global (ex: validação de email único)
       throw error
     }
   }
 
+  /**
+   * Lista todos os profissionais cadastrados no sistema
+   * Fornece visão geral de todos os usuários da plataforma
+   */
   public async index() {
+    // Busca todos os profissionais sem carregamento de relações para performance
+    // Adequado para listagens simples e seleção de profissionais
     const profissionals = await Profissional.all()
 
     return {
@@ -67,7 +85,13 @@ export default class ProfissionaisController {
     }
   }
 
+  /**
+   * Exibe um profissional específico baseado no ID fornecido
+   * Utilizado para visualização de perfil individual
+   */
   public async show({ params }: HttpContext) {
+    // Localiza o profissional pelo ID ou retorna erro 404 se não encontrado
+    // Essencial para páginas de perfil e detalhamento de usuário
     const profissional = await Profissional.findOrFail(params.id)
 
     return {
@@ -75,9 +99,16 @@ export default class ProfissionaisController {
     }
   }
 
+  /**
+   * Remove um profissional do sistema
+   * Executa exclusão permanente do usuário e todos os dados associados
+   */
   public async destroy({ params }: HttpContext) {
+    // Localiza o profissional a ser excluído
     const profissional = await Profissional.findOrFail(params.id)
 
+    // Executa exclusão física do registro
+    // Importante considerar impacto em registros relacionados (dias de trabalho, etc.)
     await profissional.delete()
     return {
       message: 'Profissional excluído',
@@ -85,12 +116,21 @@ export default class ProfissionaisController {
     }
   }
 
+  /**
+   * Atualiza os dados de um profissional existente
+   * Permite modificação do perfil e informações cadastrais
+   */
   public async update({ params, request }: HttpContext) {
+    // Obtém todos os dados enviados na requisição de atualização
     const body = request.body()
 
+    // Localiza o profissional a ser atualizado
     const profissional = await Profissional.findOrFail(params.id)
+    // Aplica as modificações preservando campos não alterados
+    // O modelo deve validar campos únicos como email e COREN
     profissional.merge(body)
 
+    // Persiste as alterações no banco de dados
     await profissional.save()
     return {
       message: 'Profissional atualizado',
